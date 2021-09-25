@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/src/components/recipe-card.styled.js
+/src/components/accordian.styled.js
