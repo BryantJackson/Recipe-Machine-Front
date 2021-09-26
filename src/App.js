@@ -8,7 +8,7 @@ function App() {
   const [items, setItems] = useState(null)
 
   useEffect(() => {
-      axios('http://127.0.0.1:5000/')
+      axios('http://127.0.0.1:5000/get_recipe/dinner')
       .then(response => {
         setItems(response.data)
         // console.log(response)
@@ -18,11 +18,11 @@ function App() {
   return (
     <div className="App">
       
-      {/* {items && <StyledRecipeCard recipe={items} />} */}
+      {items && <StyledRecipeCard recipe={items} />}
 
-      {items && items.map((item) => (
+      {/* {items && items.map((item) => (
         <DayPlan meals={item}/>
-      ))}
+      ))} */}
       {/* {items && <RecipeCard recipe={items}/>} */}
     </div>
   );
