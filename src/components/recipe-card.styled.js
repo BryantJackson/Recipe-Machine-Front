@@ -1,6 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {IconContext} from 'react-icons';
 import {FiPlus, FiMinus} from 'react-icons/fi'
+import { useState } from "react";
 
 
 const Container = styled.div`
@@ -8,9 +9,15 @@ const Container = styled.div`
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 0.2fr 2.5fr; 
+    grid-template-rows: 0.1fr 2.5fr; 
 
     grid-template-areas: "title" "content";
+
+    transition: max-height 0.8s ease-in-out;
+
+    ${ props => props.opened ? css`
+        max-height: 100%;` : css` max-height: 41px`
+    }
 `;
 
 const Heading  = styled.h4`
@@ -24,6 +31,8 @@ const TitleArea = styled.div`
     border-radius: 5px; 
     padding-left: 5px;
     padding-right: 5px;
+    max-height: 41px;
+    cursor: pointer;
 
     color: whitesmoke;
     text-shadow: 1px 2px 5px #000022;
@@ -46,11 +55,18 @@ const TitleArea = styled.div`
 const Content = styled.div`
     background-color: lightgray;
     border-radius: 5px;
+    overflow: hidden;
 
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1.8fr 0.25fr;
     grid-column-gap: 10px;
+
+    transition: max-height 0.8s ease-in-out;
+
+    ${ props => props.opened ? css`
+        max-height: 100%;` : css` max-height: 0px`
+    }
     
 `;
 
@@ -113,16 +129,25 @@ const RecipeTextBottom = styled.div`
 // const TextBox = styled.span``;
 
 function StyledRecipeCard(props) {   
+    const [isOpen, setIsOpen] = useState(false)
+
     const recipe = props.recipe
-    const date = "2020 date blah"
+
+    const toggleOpenCard = () => {
+        !isOpen ? setIsOpen(true) : setIsOpen(false);
+    }
     
     return (
-        <Container>
-            <TitleArea>
-                <p>{recipe.name}</p>
-                <span>2021 bitches</span>
-            </TitleArea>
-            <Content>
+        <Container opened={isOpen}>
+            <IconContext.Provider value={{color: "whitesmoke", size: "20px"}}>
+                <TitleArea onClick={() => toggleOpenCard()}>
+                    <p>{recipe.name}</p>
+                    <span>{isOpen ? <FiMinus /> : <FiPlus />}</span>
+                    
+                </TitleArea>
+            </IconContext.Provider>
+            
+            <Content opened={isOpen}>
                 <RecipeText>
                     <Heading>Directions:</Heading>
                     <ol>
@@ -152,6 +177,7 @@ function StyledRecipeCard(props) {
                     </ul>
                 </RecipeTextBottom>
             </Content>
+            
         </Container>
     );
 

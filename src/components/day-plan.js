@@ -1,5 +1,5 @@
 import React from 'react';
-import RecipeCard from './recipe-card';
+import StyledRecipeCard from './recipe-card.styled';
 
 function DayPlan({meals}) {
     const MealDate = Object.keys(meals)
@@ -7,10 +7,10 @@ function DayPlan({meals}) {
     return (
         <div>
             {meals[MealDate].map((meal) => {
-                return <RecipeCard recipe={meal} date={MealDate}/>
+                return <StyledRecipeCard recipe={meal} date={MealDate}/>
                 // console.log(meal)
             })}
-            {/* {console.log(meals[MealDate])} */}
+            {/* {console.log(MealDate)} */}
             
         </div>
     );
