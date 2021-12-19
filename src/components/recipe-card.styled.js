@@ -1,24 +1,26 @@
 import styled, { css } from "styled-components";
 import {IconContext} from 'react-icons';
 import {FiPlus, FiMinus} from 'react-icons/fi'
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Container } from "./containers.styled";
+import { TitleArea } from "./title-area.styled";
 
 
-const Container = styled.div`
-    max-width: 880px;
+// const Container = styled.div`
+//     max-width: 880px;
 
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.1fr 2.5fr; 
+//     display: grid;
+//     grid-template-columns: 1fr;
+//     grid-template-rows: 0.1fr 2.5fr; 
 
-    grid-template-areas: "title" "content";
+//     grid-template-areas: "title" "content";
 
-    transition: max-height 0.8s ease-in-out;
+//     transition: max-height 0.8s ease-in-out;
 
-    ${ props => props.opened ? css`
-        max-height: 100%;` : css` max-height: 41px`
-    }
-`;
+//     ${ props => props.opened ? css`
+//         max-height: 100%;` : css` max-height: 41px`
+//     }
+// `;
 
 const Heading  = styled.h4`
     padding-left: 25px;
@@ -26,31 +28,43 @@ const Heading  = styled.h4`
     margin-bottom: 0px;
 `
 
-const TitleArea = styled.div`
-    background-color: darkgray;
-    border-radius: 5px; 
-    padding-left: 5px;
-    padding-right: 5px;
-    max-height: 41px;
-    cursor: pointer;
+const CheckBox = styled.input.attrs(props => ({
+    type: "checkbox"
+}))`
+    position: relative;
+    width: 25px;
+    height: 25px;
+    margin-top: -5px;
+    top: 3px;
 
-    color: whitesmoke;
-    text-shadow: 1px 2px 5px #000022;
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 10%;
-    white-space: nowrap;
+   display: ${props => props.editMode ? "initial" : "none"}
+`
 
-    grid-area: "title";
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-    align-items: center;
+// const TitleArea = styled.div`
+//     background-color: darkgray;
+//     border-radius: 5px; 
+//     padding-left: 5px;
+//     padding-right: 5px;
+//     max-height: 41px;
+//     cursor: pointer;
 
-    span {
-        text-align: right;
-    }
+//     color: whitesmoke;
+//     text-shadow: 1px 2px 5px #000022;
+//     font-size: 20px;
+//     font-family: Arial, Helvetica, sans-serif;
+//     line-height: 10%;
+//     white-space: nowrap;
 
-`;
+//     grid-area: "title";
+//     grid-template-columns: 1fr 1fr;
+//     display: grid;
+//     align-items: center;
+
+//     span {
+//         text-align: right;
+//     }
+
+// `;
 
 const Content = styled.div`
     background-color: lightgray;
@@ -59,7 +73,7 @@ const Content = styled.div`
 
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1.8fr 0.25fr;
+    grid-template-rows: 2.5fr 0.25fr;
     grid-column-gap: 10px;
 
     transition: max-height 0.8s ease-in-out;
@@ -79,14 +93,9 @@ const ImgContainer = styled.div`
     min-height: 96%;
     
     justify-content: end;
-    background-image: url("https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fimages.media-allrecipes.com%2Fuserphotos%2F4019381.jpg");
+    background-image: url(${props => props.image_source});
     background-size: cover;
-    
-
-    img {
-        width: 100%;
-        height: auto;
-    }
+    background-position: center;
 
     div {
         background-color: #5d5555b5;
@@ -126,23 +135,28 @@ const RecipeTextBottom = styled.div`
     
 `
 
-// const TextBox = styled.span``;
-
 function StyledRecipeCard(props) {   
     const [isOpen, setIsOpen] = useState(false)
 
     const recipe = props.recipe
 
-    const toggleOpenCard = () => {
-        !isOpen ? setIsOpen(true) : setIsOpen(false);
-    }
+    const toggleOpenCard = useCallback(() => {
+        if(!props.editMode) {
+            !isOpen ? setIsOpen(true) : setIsOpen(false);
+        }
+    }, [isOpen, props.editMode])
+
+    useEffect(() => {setIsOpen(false)}, [props.editMode])
     
     return (
-        <Container opened={isOpen}>
+        <Container opened={isOpen} >
             <IconContext.Provider value={{color: "whitesmoke", size: "20px"}}>
                 <TitleArea onClick={() => toggleOpenCard()}>
                     <p>{recipe.name}</p>
-                    <span>{isOpen ? <FiMinus /> : <FiPlus />}</span>
+                    <span>
+                        <CheckBox editMode={props.editMode}/>
+                        {isOpen ? <FiMinus /> : <FiPlus />}
+                    </span>
                     
                 </TitleArea>
             </IconContext.Provider>
@@ -151,13 +165,12 @@ function StyledRecipeCard(props) {
                 <RecipeText>
                     <Heading>Directions:</Heading>
                     <ol>
-                        {recipe.directions.map((direct) => (
-                                    <li>{direct}</li>
+                        {recipe.directions.map((direct, index) => (
+                                    <li key={index}>{direct}</li>
                                 ))}
                     </ol>
                 </RecipeText>
-                <ImgContainer>
-                    {/* <img src="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fimages.media-allrecipes.com%2Fuserphotos%2F4019381.jpg" /> */}
+                <ImgContainer image_source={recipe.imageUrl}>
                     <div>
                         <Heading>Info:</Heading>
                         <ul>
@@ -171,8 +184,8 @@ function StyledRecipeCard(props) {
                 <RecipeTextBottom>
                     <Heading>Ingredients:</Heading>
                     <ul>
-                        {recipe.ingredients.map((ing) => (
-                                        <li>{ing}</li>
+                        {recipe.ingredients.map((ing, index) => (
+                                        <li key={index}>{ing}</li>
                                     ))}
                     </ul>
                 </RecipeTextBottom>

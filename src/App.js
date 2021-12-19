@@ -1,47 +1,82 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useCallback, useState } from 'react';
+import { BrowserRouter as Router, Route, Switch, Link, useParams } from 'react-router-dom';
+import { LinkContainer, PageContainer } from './components/containers.styled';
+import { FaArrowRight } from 'react-icons/fa';
+import { StyledDateTitle, StyledList } from './components/title-area.styled';
+import LoadingPage from './components/loading-page';
 import DayPlan from './components/day-plan';
-import StyledRecipeCard from './components/recipe-card.styled';
+import useFetch from './components/useFetch';
+import StyledModal from './components/modal.styled';
 
 function App() {
-  const [items, setItems] = useState(null)
+  const [ workingWeek, setWorkingWeek] = useState('current-week');
+  const { items, isLoading, error, setCurrentUrl, makePostRequest} = useFetch('/', {workingWeek});
+  
+  function GetDay() {
+      let { id } = useParams();
+      
+      return (
+        <DayPlan meals={items[id]} key={id} dayId={id} workingWeek={workingWeek} makePostRequest={makePostRequest}/>
+      )
+  }
 
-  const api = axios.create({
-    baseURL: 'http://127.0.0.1:5000',
-    withCredentials: true
-  })
+  const HandleClick = useCallback(() => {
+    setCurrentUrl('/replace_current_meal_plan')
+  }, [setCurrentUrl])
+  
+  const DisplayLinks = useCallback(() => {
+    let links =  items.map((item, index) => {
+      let date = Object.keys(item)[0]
+      let titles = item[date].map((recipe) => { return <li key={recipe['name']} >{recipe['name']}</li> } )
+      
+      return (
+          <Link style={{color: "transparent", textDecoration: "none"}} to={`/${index}`} key={index} >
+            <LinkContainer>
+              <StyledDateTitle style={{gridTemplateColumns: "0.9fr 0.02fr 0.08fr"}}>
+                <p>{Object.keys(item)[0]}</p>
+                <span>Go to day</span>
+                <span>{<FaArrowRight />}</span>            
+              </StyledDateTitle>
+              <StyledList>{titles}</StyledList>
+            </LinkContainer>
+          </Link>
+      )
+    })
+    
+    return (<PageContainer>
+      <div>
+        {/* <StyledButton style={{position: "relative", float: "right", zIndex: "1000"}} onClick={() => {HandleClick()}}>Get New Mealplan</StyledButton> */}
+        <StyledModal style={{float: 'right'}} clickFunc={HandleClick} setWorkingWeek={setWorkingWeek} setCurrentUrl={setCurrentUrl} />
+        <h2>Meal plan for: <span>{Object.keys(items[0])[0]} - {Object.keys(items.at(-1))[0]}</span></h2>
+      </div>
 
-  api.interceptors.request.use(
-    function(config) {
-      config.headers.withCredentials = true;
-      return config
-    },
-    function(err) {
-      return Promise.reject(err)
-    }
-  )
-
-  useEffect(() => {
-      api.get('/')
-      .then(response => {
-        setItems(response.data)
-      })
-  }, [])
+      {links}
+      </PageContainer>)
+     
+  }, [items, HandleClick, setCurrentUrl])
 
   return (
-    <div className="App">
-      
-      {/* {items && <StyledRecipeCard recipe={items} />} */}
-      <h1>Meals</h1>
+    <Router>
+      <div className="App">
 
-      {items && items.map((item) => {
-        return <div>
-          <p>{Object.keys(item)[0]}</p>
-          <DayPlan meals={item}/>
-          </div>
-      })}
-      {/* {items && <RecipeCard recipe={items}/>} */}
-    </div>
+        {/* <LoadingPage /> */}
+      
+        { error && <div>{error}</div>}
+
+        {isLoading && <h2>Loading. Please Wait...</h2>}
+        
+          <Switch>
+            <Route exact path="/">
+            { items && <DisplayLinks /> }
+            </Route>
+            <Route path="/:id">
+            { items && <GetDay /> }
+            </Route>
+          </Switch>
+
+          
+      </div>
+    </Router>
   );
 }
 
