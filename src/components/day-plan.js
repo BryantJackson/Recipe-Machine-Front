@@ -29,7 +29,7 @@ function DayPlan(props) {
 
         const elements = [...event.target.elements];
         const checkedElements = elements.filter(element => element.localName === "input").map(filteredElement => {return filteredElement.checked});
-        console.log(checkedElements);
+        event.target.reset();
 
         makePostRequest(`replace_selected_recipes/${selectedDay}`, {'selected-items' : checkedElements})
     }
@@ -45,7 +45,7 @@ function DayPlan(props) {
                     </StyledButton>
                     <div style={{display: "flex", justifyContent: "space-evenly"}}>
                         <h2 style={{textAlign: "right", position: "static", fontSize: "35px", flexGrow: "1"}} >{MealDate}</h2>
-                        { workingWeek != 'previous-week' ? <div style={{display: "flex", flexGrow: "1", justifyContent: "flex-end"}}>
+                        { workingWeek !== 'previous-week' ? <div style={{display: "flex", flexGrow: "1", justifyContent: "flex-end"}}>
                             {!editMode && <SecondaryButton onClick={() => {handleEditMode()}}>Replace Recipes</SecondaryButton>}
                             {editMode && <SecondaryButton onClick={() => {handleEditMode()}}>Cancel</SecondaryButton>}
                             {editMode && <StyledSubmit baseColor={100} value="Update">Update</StyledSubmit>}

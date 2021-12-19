@@ -32,7 +32,7 @@ const StyledModal = (props) => {
                 <StyledButton shadowColor={'238deg 96% 68%'} label='upcoming-week' onClick={(e) => {handleClick(e.target)}} >View Upcoming Week</StyledButton>
                 <StyledButton shadowColor={'238deg 96% 68%'} label='current-week' onClick={(e) => {handleClick(e.target)}} >View Current Week</StyledButton>
                 <StyledButton shadowColor={'238deg 96% 68%'} disabled={pastWeekDisabled} label='previous-week' onClick={(e) => {handleClick(e.target)} }>View Previous Week</StyledButton>
-                <StyledButton shadowColor={'238deg 96% 68%'} onClick={() => {props.clickFunc()}}>Get New Mealplan</StyledButton>
+                <StyledButton shadowColor={'238deg 96% 68%'} disabled={(props.workingWeek === 'previous-week')} onClick={() => {props.clickFunc()}}>Get New Mealplan</StyledButton>
                 
             </ModalMenu>
             <ModalButton onClick={() => {toggleOpenModal()}} 
