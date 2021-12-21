@@ -44,7 +44,7 @@ function DayPlan(props) {
                         <span>Go Back</span> 
                     </StyledButton>
                     <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                        <h2 style={{textAlign: "right", position: "static", fontSize: "35px", flexGrow: "1"}} >{MealDate}</h2>
+                        <h2>{MealDate}</h2>
                         { workingWeek !== 'previous-week' ? <div style={{display: "flex", flexGrow: "1", justifyContent: "flex-end"}}>
                             {!editMode && <SecondaryButton onClick={() => {handleEditMode()}}>Replace Recipes</SecondaryButton>}
                             {editMode && <SecondaryButton onClick={() => {handleEditMode()}}>Cancel</SecondaryButton>}

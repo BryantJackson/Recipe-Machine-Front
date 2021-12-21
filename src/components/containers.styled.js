@@ -38,7 +38,6 @@ export const Container = styled.div`
 
     margin-left: 15px;
     margin-right: 7px;
-    margin-bottom: 20px;
     border-radius: 5px;
 
     transition: max-height 0.8s ease-in-out;
@@ -46,6 +45,10 @@ export const Container = styled.div`
     ${ props => props.opened ? css`
         max-height: 1200px; 
         margin-bottom: 5px;
+
+        @media (max-width: 450px) {
+            margin-right: 10px;
+        }
         ` : css`
 
         :hover {
@@ -56,6 +59,12 @@ export const Container = styled.div`
 
         max-height: 41px; 
         margin-bottom: 20px;
+
+        @media (max-width: 450px) {
+            margin-bottom: 0px;
+            margin-right: 10px;
+        }
+        
         `
     }
 `;
@@ -98,6 +107,13 @@ export const PageContainer = styled.div`
 
             span { top: 35px; }
         }
+
+        @media screen and (max-width: 450px) {
+            font-size: 1.7rem;
+            span{
+                font-size: 1.3rem;
+            }
+        }
     }
 
     background-color: #CFE7F7db;
@@ -125,4 +141,22 @@ export const ButtonContainer = styled.div`
     margin-right: 7px;
     margin-left: 15px;
     align-items: center;
+
+    h2 {
+        text-align: right; 
+        position: static; 
+        font-size: 35px; 
+        flex-grow: 1;
+    }
+
+    @media screen and (max-width: 450px) {
+        padding-top: 10px;
+        padding-bottom: 50px;
+        max-width: 350px;
+
+        h2{
+            position: absolute;
+            top: 50px;
+        }
+    }
 `

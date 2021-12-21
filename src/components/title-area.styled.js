@@ -35,6 +35,11 @@ export const TitleStyle = css`
 `
 export const TitleArea = styled.div`
     ${TitleStyle}
+
+    @media screen and (max-width: 450px) {
+        font-size: 0.8em;
+        line-height: 0%;
+    }
 `;
 
 export const StyledDateTitle = styled.div`
@@ -43,6 +48,10 @@ export const StyledDateTitle = styled.div`
     max-height: 60px;
     position: relative;
     z-index: 2;
+
+    @media screen and (max-width: 450px) {
+        font-size: 1rem;
+    }
 `;
 
 export const StyledList = styled.ul`
@@ -75,5 +84,10 @@ export const StyledList = styled.ul`
     li:before {
         content: "- ";
         text-indent: -5px;
+    }
+
+    @media screen and (max-width: 450px) {
+        font-size: 0.7rem;
+        max-height: 40px;
     }
 `

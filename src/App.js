@@ -45,7 +45,6 @@ function App() {
     
     return (<PageContainer>
       <div>
-        {/* <StyledButton style={{position: "relative", float: "right", zIndex: "1000"}} onClick={() => {HandleClick()}}>Get New Mealplan</StyledButton> */}
         <StyledModal style={{float: 'right'}} clickFunc={HandleClick} setWorkingWeek={setWorkingWeek} setCurrentUrl={setCurrentUrl} workingWeek={workingWeek}/>
         <h2>Meal plan for: <span>{Object.keys(items[0])[0]} - {Object.keys(items.at(-1))[0]}</span></h2>
       </div>

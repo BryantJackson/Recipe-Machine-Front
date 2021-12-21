@@ -78,8 +78,17 @@ const Content = styled.div`
 
     transition: max-height 0.8s ease-in-out;
 
+    @media screen and (max-width: 450px) {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 0.25fr;
+    }
+
     ${ props => props.opened ? css`
-        max-height: 100%;` : css` max-height: 0px`
+        max-height: 100%;
+        @media (max-width: 450px) {
+            margin-right: 2px;
+        }
+        ` : css` max-height: 0px`
     }
     
 `;
@@ -96,6 +105,10 @@ const ImgContainer = styled.div`
     background-image: url(${props => props.image_source});
     background-size: cover;
     background-position: center;
+
+    @media screen and (max-width: 450px) {
+        margin-left: 10px;
+    }
 
     div {
         background-color: #5d5555b5;
@@ -124,6 +137,10 @@ const RecipeTextBottom = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
     grid-column: 1 / -1 ;
+
+    @media (max-width: 450px) {
+            padding-right: 10px;
+        }
     
     ul {
         column-count: 2;
