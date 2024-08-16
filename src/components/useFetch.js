@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 export const api = axios.create({
-  baseURL: 'https://recipe-machine-back.herokuapp.com',
+  baseURL: 'https://recipe-machine-back.onrender.com/:5000',
   withCredentials: true
 })
 
